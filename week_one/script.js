@@ -3,7 +3,7 @@
 const _ = require('lodash');
 
 //never use 'var'
-//const or let is preferred
+//const or let are preferred
 
 //Ex. 1
 console.log('Hello World, I\'m Node');
