@@ -1,4 +1,5 @@
 'use strict';
+const {rawListeners} = require('../database/db');
 const catModel = require('../models/catModel');
 //const cats = catModel.cats;
 
@@ -17,13 +18,25 @@ const getCat = async (req,res) => {
   }
 };
 
-const createCat = (req,res) => {
-  console.log(req.body);
-  res.send('Adding a a cat');
+const createCat = async (req, res) => {
+  const cat = req.body;
+  cat.filename = req.file.filename;
+  console.log('creating a new cat:', cat);
+  const catId = await catModel.addCat(cat, res);
+  res.status(201).json({catId});
 };
 
-const modifyCat = (req,res) => {};
-const deleteCat = (req,res) => {};
+const modifyCat = (req, res) => {};
+
+const deleteCat = async (req, res) => {
+  const result = await catModel.deleteCatById(req.params.catId, res);
+  console.log('cat deleted', result)
+  if (result.affectedRows > 0) {
+    res.json({message: 'cat deleted'});
+  } else {
+    res.status(404).json({message: 'cat was already deleted'});
+  }
+};
 
 module.exports = {
   getCats,
