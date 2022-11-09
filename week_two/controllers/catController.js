@@ -26,7 +26,16 @@ const createCat = async (req, res) => {
   res.status(201).json({catId});
 };
 
-const modifyCat = (req, res) => {};
+const modifyCat = async (req, res) => {
+  const cat = req.body;
+  const catId = req.params.catId;
+  const result = await catModel.updateCatById(catId, cat, res);
+  if (result.affectedRows > 0) {
+    res.json({message: 'cat modified', catId: catId});
+  } else {
+    res.status(404).json({message: 'nothing changed'});
+  }
+};
 
 const deleteCat = async (req, res) => {
   const result = await catModel.deleteCatById(req.params.catId, res);
