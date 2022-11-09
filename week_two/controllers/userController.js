@@ -23,8 +23,12 @@ const createUser = async (req, res) => {
   res.status(201).json({userId: result});
 };
 
-const modifyUser = (req,res) => {};
-const deleteUser = (req,res) => {};
+const modifyUser = (req,res) => {
+  // TODO: add functionality and data model
+};
+const deleteUser = (req,res) => {
+  // TODO: add functionality and data model
+};
 
 module.exports = {
   getUsers,
