@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Balloon</title>
+</head>
+<body>
+<p style="margin-left: 50%; margin-top: 20%; font-size: 30px;">🎈</p>
+
+<script>
+  const p = document.querySelector('p');
+  let size;
+
+  function setSize(bigger) {
+    size = bigger
+    p.style.fontSize = size + 'px';
+  }
+
+  setSize(40);
+
+  function arrowKey(event) {
+    if (event.key === 'ArrowUp') {
+      if (size > 200) {
+        p.textContent = '💥';
+        document.body.removeEventListener('keydown', arrowKey);
+      } else {
+        setSize(size * 1.5);
+        event.preventDefault();
+      }
+    } else if (event.key === 'ArrowDown') {
+      setSize(size * 0.5);
+      event.preventDefault();
+    }
+  }
+
+  document.body.addEventListener('keydown', arrowKey);
+
+</script>
+</body>
+</html>

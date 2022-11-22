@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script defer src="script.js"></script>
+    <link href="styles.css" rel="stylesheet">
+    <title>Task 2</title>
+</head>
+<body>
+<main>
+    <header>
+    <h1>TV MAZE Search Engine</h1>
+    <form id="search-form" action="https://api.tvmaze.com/search/shows">
+        <label>
+            <input type="text" name="search-field" placeholder="Name of a series">
+        </label>
+        <button type="submit">Search</button>
+    </form>
+    </header>
+    <video autoplay muted loop id="video">
+        <source src="Curtains%20-%20320.mp4" type="video/mp4">
+    </video>
+    <div id="results"></div>
+</main>
+</body>
+</html>
