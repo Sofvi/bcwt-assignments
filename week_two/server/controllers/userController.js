@@ -40,8 +40,15 @@ const createUser = async (req, res) => {
 const modifyUser = (req, res) => {
   // TODO: add functionality & data model
 };
-const deleteUser = (req, res) => {
-  // TODO: add functionality & data model
+
+const deleteUser = async (req, res) => {
+  const loginUser = req.user.user_id;
+  const result = await userModel.deleteUser(res,req.params.userId,loginUser)
+  if(result && result.affectedRows > 0) {
+    res.json({message:"user deleted"})
+  } else {
+    res.status(400).json({message:"fail"})
+  }
 };
 const checkToken = (req, res) => {
   res.json({user: req.user});

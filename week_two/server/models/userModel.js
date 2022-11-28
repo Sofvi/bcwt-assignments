@@ -46,10 +46,23 @@ const addUser = async (user, res) => {
     res.status(500).send(e.message);
   }
 };
+const deleteUser = async(res,id,loginUser) => {
+  try {
+    if(loginUser === 1) {
+      const query = "DELETE FROM wop_user WHERE user_id=?"
+      const [rows] = await promisePool.query(query,[id])
+      return rows
+    }
+  } catch(e) {
+    console.log("error",e.message);
+    res.status(500).send(e.message);
+  }
+};
 
 module.exports = {
   getAllUsers,
   getUserById,
   getUserLogin,
   addUser,
+  deleteUser
 };

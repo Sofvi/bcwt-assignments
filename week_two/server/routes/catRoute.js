@@ -1,4 +1,5 @@
 'use strict';
+
 // catRoutes
 const express = require('express');
 const router = express.Router()
@@ -22,15 +23,25 @@ const fileFilter = (req, file, cb) => {
 const upload = multer({dest: 'uploads/', fileFilter});
 
 router.get('/', catController.getCats)
-.get('/:catId', catController.getCat)
 .post('/',
     upload.single('cat'),
     body('name').isLength({min: 2}).trim().escape(),
     body('birthdate').isDate(),
     body('weight').isFloat({min: 0.1, max: 30}),
     catController.createCat)
-.put('/', catController.modifyCat) // TODO: add validators
-    .put('/:catId', catController.modifyCat) // TODO: add validators
-    .delete('/:catId', catController.deleteCat);
+.put('/',
+    body("name").isAlphanumeric().trim().escape(),
+    body("birthdate").isDate(),
+    body("weight").isFloat({min:0.1,max:30}),
+    body("owner").isInt({min:1}),
+    catController.modifyCat)
+
+router.get('/:catId', catController.getCat)
+.put('/:catId',
+    body("name").isLength({min:3}).trim().escape(),
+    body("birthdate").isDate(),
+    body("weight").isFloat({min:0.1,max:30}),
+    catController.modifyCat)
+.delete('/:catId', catController.deleteCat);
 
 module.exports = router;
