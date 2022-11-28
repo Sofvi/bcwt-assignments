@@ -51,7 +51,7 @@ app.post('/login', (req, res) => {
 
 app.get('/logout', (req,res) => {
   req.session.loggedIn = false;
-  res.clearCookie('connect.sid');
+  //res.clearCookie('connect.sid'); //cookie for the session
   res.redirect('/');
 });
 
