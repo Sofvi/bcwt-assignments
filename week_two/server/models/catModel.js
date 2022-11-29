@@ -40,12 +40,18 @@ const addCat = async (cat, res) => {
 
 const deleteCatById = async (catId, owner, res) => {
   try {
-    const [rows] =
-        await promisePool.query("DELETE FROM wop_cat WHERE cat_id = ? AND owner = ?",
-            [catId, owner]);
-    return rows;
-  } catch (e) {
-    console.error("error", e.message);
+    let query = "";
+    const queryPlaceHolder = [id];
+    if(owner === 1) {
+      query = "DELETE FROM wop_cat WHERE cat_id = ?";
+    } else {
+      query = "DELETE FROM wop_cat WHERE cat_id = ? AND owner = ?";
+      queryPlaceHolder.push(owner);
+    }
+    const [rows] = await promisePool.query(query, queryPlaceHolder);
+    return rows
+  } catch(e) {
+    console.log("error",e.message);
     res.status(500).send(e.message);
   }
 };
