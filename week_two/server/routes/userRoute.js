@@ -20,6 +20,6 @@ router.get('/:userId', userController.getUser)
     body("email").isEmail().normalizeEmail(),
     body("passwd").isStrongPassword(),
     userController.modifyUser)
-.delete(userController.deleteUser)
+//.delete(userController.deleteUser)
 
 module.exports = router

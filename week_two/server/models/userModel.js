@@ -15,7 +15,7 @@ const getAllUsers = async (res) => {
 const getUserById = async (id, res) => {
   try {
     const sql = 'SELECT user_id, name, email, role FROM wop_user ' +
-        'WHERE user_id=' + id;
+      'WHERE user_id=' + id;
     const [rows] = await promisePool.query(sql);
     return rows[0];
   } catch (e) {
@@ -27,8 +27,8 @@ const getUserLogin = async (user) => {
   try {
     console.log('getUserLogin()', user);
     const [rows] = await promisePool.execute(
-        'SELECT * FROM wop_user WHERE email = ?;',
-        user);
+      'SELECT * FROM wop_user WHERE email = ?;',
+      user);
     return rows;
   } catch (e) {
     console.error("error", e.message);
@@ -46,23 +46,10 @@ const addUser = async (user, res) => {
     res.status(500).send(e.message);
   }
 };
-const deleteUser = async(res,id,loginUser) => {
-  try {
-    if(loginUser === 1) {
-      const query = "DELETE FROM wop_user WHERE user_id=?"
-      const [rows] = await promisePool.query(query,[id])
-      return rows
-    }
-  } catch(e) {
-    console.log("error",e.message);
-    res.status(500).send(e.message);
-  }
-};
 
 module.exports = {
   getAllUsers,
   getUserById,
   getUserLogin,
   addUser,
-  deleteUser
 };

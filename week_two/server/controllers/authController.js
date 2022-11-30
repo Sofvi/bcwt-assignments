@@ -1,46 +1,65 @@
 'use strict';
-const jwt = require("jsonwebtoken");
-const passport = require("passport");
-const userModel = require("../models/userModel");
-const {validationResult} = require("express-validator");
-require("dotenv").config();
+const jwt = require('jsonwebtoken');
+const passport = require('passport');
+const bcrypt = require('bcryptjs');
+const {validationResult} = require('express-validator');
+const {addUser} = require('../models/userModel');
+require('dotenv').config();
 
 const login = (req, res) => {
+  // TODO: add passport authenticate
   passport.authenticate('local', {session: false}, (err, user, info) => {
     if (err || !user) {
       return res.status(400).json({
         message: 'Something is not right',
-        user: user
+        user: user,
       });
     }
     req.login(user, {session: false}, (err) => {
       if (err) {
         res.send(err);
       }
-      // generate a signed son web token with the contents of user object and return it in the response
+      // generate a signed json web token with the contents of user object and return it in the response
+      // do not include password in token/user object when sending to client
+      delete user.password;
       const token = jwt.sign(user, process.env.JWT_SECRET);
       return res.json({user, token});
     });
   })(req, res);
 };
 
-const createUser = async(req,res) => {
-  if(!req.body.role) {
-    req.body.role = 1
+const register = async (req, res) => {
+  console.log('Creating a new user:', req.body);
+  const newUser = req.body;
+  if (!newUser.role) {
+    // default user role (normal user)
+    newUser.role = 1;
   }
   const errors = validationResult(req);
-  console.log("validation errors",errors);
-  if(errors.isEmpty()) {
-    const result = await userModel.addUser(res,req.body)
-    console.log(result);
-    res.status(201).json({message:"user created",user_id:result})
+  console.log('validation errors', errors);
+  if (errors.isEmpty()) {
+    // Hash the input password and replace the clear text passwd with the hashed one
+    // before adding to the db
+    const salt = await bcrypt.genSalt();
+    const paswordHash = await bcrypt.hash(newUser.passwd, salt);
+    newUser.passwd = paswordHash;
+    const result = await addUser(newUser, res);
+    res.status(201).json({ message: 'user created', userId: result });
   } else {
-    res.status(400).json({message:"fail",errors: errors.array()})
+    res.status(400).json({
+      message: 'user creation failed',
+      errors: errors.array(),
+    });
   }
+};
 
-}
+const logout = (req, res) => {
+  console.log('some user logged out');
+  res.json({message: 'logged out'});
+};
 
 module.exports = {
   login,
-  createUser
+  logout,
+  register,
 };
